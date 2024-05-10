@@ -51,12 +51,12 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ data: inputValue })
+                    body: JSON.stringify({ uri: inputValue })
                 });
 
                 const data = await response.json();
 
-                if (data.success) {
+                if (data.is_phishing) {
                     document.getElementById("symbol").innerHTML = "&#x2714;";
                     document.getElementById("symbol").classList.remove("red");
                     document.getElementById("symbol").classList.add("green");
