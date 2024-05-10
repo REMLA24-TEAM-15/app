@@ -10,7 +10,7 @@ def index ():
 @app.route("/query", methods=["POST"])
 def query():
 	uri = request.json.get("uri")
-	url = "http://localhost:8081/predict"
+	url = "http://model-service:8081/predict"
 	params = {"URI": uri}
 	response = requests.post(url, params=params)
 
@@ -26,4 +26,4 @@ def query():
 def get_version():
 	return jsonify({"version": "-1.0.0"})
 
-app.run(host="0.0.0.0", port =8080 , debug=True)
+app.run(host="0.0.0.0", port=8080 , debug=True)
