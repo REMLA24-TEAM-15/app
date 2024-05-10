@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check your URI for phishing</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+        }
+        .symbol {
+            font-size: 50px;
+            margin-top: 20px;
+        }
+        .red {
+            color: red;
+        }
+        .green {
+            color: green;
+        }
+        #inputText {
+            width: 300px;
+
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Check your URI for phishing</h2>
+        <input type="text" id="inputText" placeholder="Enter something">
+        <button onclick="sendRequest()">Check!</button>
+        <div id="symbol" class="symbol"></div>
+    </div>
+
+    <script>
+        async function sendRequest() {
+            const inputValue = document.getElementById("inputText").value;
+
+            try {
+                const response = await fetch('/query', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ data: inputValue })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById("symbol").innerHTML = "&#x2714;";
+                    document.getElementById("symbol").classList.remove("red");
+                    document.getElementById("symbol").classList.add("green");
+                } else {
+                    document.getElementById("symbol").innerHTML = "&#x2718;";
+                    document.getElementById("symbol").classList.remove("green");
+                    document.getElementById("symbol").classList.add("red");
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</body>
+</html>
