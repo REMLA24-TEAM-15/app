@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      version: ${{ setps.request.outputs.version }}
+      version: ${{ steps.request.outputs.version }}
 
     steps:
     - name: Checkout code
