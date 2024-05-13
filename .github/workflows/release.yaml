@@ -31,12 +31,6 @@ jobs:
 
       - name: Build, tag and push Docker image
         run: |
-          echo "${{ env.version }}"
-          echo "$IMG:${{ env.version }}"
           IMG=ghcr.io/$REPO_LC
-          docker build \
-            --tag $IMG:${{ env.version }} \
-            --tag $IMG:${{ env.version_major }}.${{ env.version_minor }}.latest \
-            --tag $IMG:${{ env.version_major }}.latest \
-            --tag $IMG:latest .
+          docker build --tag $IMG:latest .
           docker push --all-tags $IMG

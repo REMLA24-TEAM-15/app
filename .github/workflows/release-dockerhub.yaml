@@ -13,9 +13,6 @@ jobs:
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
     steps:
-      - name: Print Docker username
-        run: echo "${{ env.DOCKER_USERNAME }}"
-
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
