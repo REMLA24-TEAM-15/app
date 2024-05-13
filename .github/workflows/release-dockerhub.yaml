@@ -6,9 +6,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  environment: dockerhub
   build:
     runs-on: ubuntu-latest
+    environment: dockerhub
     steps:
       - uses: actions/checkout@v4
       - name: Parse version info from tag
