@@ -19,7 +19,7 @@ jobs:
 
       - name: Debug
         run: |
-          echo "Repository: $REPO_LC"
+          echo "Repository: ghcr.io/$REPO_LC"
       
       - name: Registry Login (ghcr.io)
         run: |
