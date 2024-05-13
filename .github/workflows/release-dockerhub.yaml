@@ -27,6 +27,6 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          IMG=ghcr.io/$REPO_LC
+          IMG=ghcr.io/michracz00/$REPO_LC
           docker build --tag $IMG:latest .
           docker push --all-tags $IMG
