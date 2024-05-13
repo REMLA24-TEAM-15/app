@@ -57,7 +57,7 @@
 
                 const data = await response.json();
 
-                if (data.is_phishing) {
+                if (data.prediction == 1) {
                     document.getElementById("symbol").innerHTML = "&#x2718;";
                     document.getElementById("symbol").classList.remove("green");
                     document.getElementById("symbol").classList.add("red");
