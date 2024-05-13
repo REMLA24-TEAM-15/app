@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, jsonify
 import requests
+from lib_version_URLPhishing.version_util import VersionUtil
 
 app = Flask(__name__)
 
@@ -24,6 +25,7 @@ def query():
 
 @app.route("/v", methods=["GET"])
 def get_version():
-	return jsonify({"version": "-1.0.0"})
+	version = VersionUtil.get_version()
+	return jsonify({"version": version})
 
 app.run(host="0.0.0.0", port=8080 , debug=True)
