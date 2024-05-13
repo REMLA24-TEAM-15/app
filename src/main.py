@@ -37,9 +37,11 @@ def query():
 	endpoint_uri = endpoint_uri + "predict"
 
 	uri_to_check = request.json.get("uri")
+	input_data = {
+    "link": uri_to_check
+	}
 	
-	params = {"link": uri_to_check}
-	response = requests.post(uri_to_check, params=params)
+	response = requests.post(endpoint_uri, json=input_data)
 
 	if response.status_code == 200:
 		data = response.json()
