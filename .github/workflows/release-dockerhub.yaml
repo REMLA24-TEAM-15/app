@@ -15,7 +15,8 @@ jobs:
         id: version
         run: |
           VERSION=$(curl -s http://localhost:8080/v | jq -r '.version')
-          echo "::set-output name=version::$VERSION"
+          echo "Current version is: $VERSION"
+        shell: bash
 
       - name: Convert repository name to lowercase
         run: |
