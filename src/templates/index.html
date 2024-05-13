@@ -37,12 +37,13 @@
     <div class="container">
         <h2>Check your URI for phishing</h2>
         <input type="text" id="inputText" placeholder="Enter something">
-        <button onclick="sendRequest()">Check!</button>
+        <button onclick="predict()">Check!</button>
+        <h3 id="versionInfo">Version</h3>
         <div id="symbol" class="symbol"></div>
     </div>
 
     <script>
-        async function sendRequest() {
+        async function predict() {
             const inputValue = document.getElementById("inputText").value;
 
             try {
@@ -51,20 +52,34 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ data: inputValue })
+                    body: JSON.stringify({ uri: inputValue })
                 });
 
                 const data = await response.json();
 
-                if (data.success) {
-                    document.getElementById("symbol").innerHTML = "&#x2714;";
-                    document.getElementById("symbol").classList.remove("red");
-                    document.getElementById("symbol").classList.add("green");
-                } else {
+                if (data.prediction == 1) {
                     document.getElementById("symbol").innerHTML = "&#x2718;";
                     document.getElementById("symbol").classList.remove("green");
                     document.getElementById("symbol").classList.add("red");
+                } else {
+                    document.getElementById("symbol").innerHTML = "&#x2714;";
+                    document.getElementById("symbol").classList.remove("red");
+                    document.getElementById("symbol").classList.add("green");
                 }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        window.onload = function() {
+            getVersion();
+        };
+
+        async function getVersion() {
+            try {
+                const response = await fetch('/v', {method: 'GET'});
+                const responseJson = await response.json();
+                document.getElementById("versionInfo").innerText = "Version: " + responseJson.version;
             } catch (error) {
                 console.error('Error:', error);
             }
