@@ -24,8 +24,9 @@ jobs:
 
       - name: Convert repository name to lowercase
         run: |
-          echo "REPO_LC=${{ github.repository | lower }}" >> $GITHUB_ENV
-        env: '${{ github.repository }}'
+          echo "REPO_LC=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
 
       - name: Build, tag and push Docker image
         run: |
