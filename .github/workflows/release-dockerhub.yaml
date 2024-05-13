@@ -31,5 +31,7 @@ jobs:
           echo "${IMG}"
           pwd
           ls
+          cd ../
+          ls
           docker build --tag $IMG:latest .
           docker push --all-tags $IMG
