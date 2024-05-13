@@ -29,5 +29,6 @@ jobs:
         run: |
           IMG="${DOCKER_USERNAME}/${REPO_LC}"
           echo "${IMG}"
+          pwd
           docker build --tag $IMG:latest .
           docker push --all-tags $IMG
