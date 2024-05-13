@@ -32,8 +32,8 @@ jobs:
         run: |
           IMG=ghcr.io/$REPO_LC
           docker build \
-            --tag $IMG:${MAJOR}.${MINOR}.${PATCH} \
-            --tag $IMG:${MAJOR}.${MINOR}.latest \
-            --tag $IMG:${MAJOR}.latest \
+            --tag $IMG:${{ env.version }} \
+            --tag $IMG:${{ env.version_major }}.${{ env.version_minor }}.latest \
+            --tag $IMG:${{ env.version_major }}.latest \
             --tag $IMG:latest .
           docker push --all-tags $IMG
