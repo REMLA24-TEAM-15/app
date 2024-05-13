@@ -11,12 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Extract current version
-        id: version
-        run: |
-          VERSION=$(curl -s http://localhost:8080/v | jq -r '.version')
-          echo "Current version is: $VERSION"
-
       - name: Convert repository name to lowercase
         run: |
           echo "REPO_LC=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
