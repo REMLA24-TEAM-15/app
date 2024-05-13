@@ -22,7 +22,7 @@ jobs:
           echo "version_minor=$MINOR" >> $GITHUB_ENV
           echo "version_patch=$PATCH" >> $GITHUB_ENV
 
-          echo "${{ env.DUSERNAME }}"
+          echo "${{ env.USERNAME }}"
           echo "${{ secrets.PASSWORD }}"
 
       - name: Log in to Docker Hub
