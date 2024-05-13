@@ -2,8 +2,10 @@ from flask import Flask, request, render_template, jsonify
 import requests
 import os
 from lib_version_URLPhishing.version_util import VersionUtil
+from flasgger import Swagger
 
 app = Flask(__name__)
+swagger = Swagger(app)
 
 @app.route("/", methods =["GET"])
 def index ():
@@ -11,6 +13,26 @@ def index ():
 
 @app.route("/query", methods=["POST"])
 def query():
+	"""
+	Passes request for prediction from front end to model-service.
+	---
+	consumes:
+  	- application/json
+	parameters:
+    - name: uri
+      description: link to be evaluated.
+      required: True
+      schema:
+        type: object
+        required: link
+        properties:
+            link:
+                type: string
+                example: https://www.tudelft.nl/en/student/administration/termination-of-enrolment
+	responses:
+  	200:
+    	description: "The result of the classification: 'phishing' or 'legitimate'."
+	"""
 	endpoint_uri = os.environ.get("MODEL_SERVICE_URI", "http://localhost:8081/")
 	endpoint_uri = endpoint_uri + "predict"
 
@@ -29,6 +51,13 @@ def query():
 
 @app.route("/v", methods=["GET"])
 def get_version():
+	"""
+    Returns a version from version-lib.
+    ---
+    responses:
+      200:
+        description: "Current version of the webapp."
+    """
 	version = VersionUtil.get_version()
 	return jsonify({"version": version})
 
