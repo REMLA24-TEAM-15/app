@@ -1,0 +1,40 @@
+name: get-version
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  run_flask:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        pip install Flask
+
+    - name: Start Flask Application
+      run: |
+        python app.py &
+
+    - name: Wait for Startup
+      run: |
+        # Add logic to wait for Flask application to start
+        sleep 10
+
+    - name: Test Flask Application
+      run: |
+        # Add commands to test Flask application
+        curl http://localhost:8080/v  # Example test request
+
+    - name: Stop Flask Application
+      run: |
+        pkill -f "python app.py"
