@@ -25,14 +25,11 @@ jobs:
       run: |
         python src/main.py &
 
-    - name: Wait for Startup
-      run: |
-        # Add logic to wait for Flask application to start
-        sleep 10
-
     - name: Test Flask Application
       run: |
-        curl http://localhost:8080/v
+        RESPONSE=$(curl -s http://localhost:8080/v)
+        VERSION=$(echo "$RESPONSE" | jq -r '.version')
+        echo "Version: $VERSION"
 
     - name: Stop Flask Application
       run: |
