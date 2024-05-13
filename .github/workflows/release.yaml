@@ -4,14 +4,14 @@ on:
   push:
   workflow_dispatch:
 
-env:
-  VERSION: "-1.0.0"
-
 jobs:
 
   # starts flask application and gets version
   get-version:
     runs-on: ubuntu-latest
+
+    outputs:
+      version: ${{ setps.request.outputs.version }}
 
     steps:
     - name: Checkout code
@@ -31,11 +31,11 @@ jobs:
         python src/main.py &
 
     - name: Get Version
-      id: get-version
+      id: request
       run: |
         RESPONSE=$(curl -s http://localhost:8080/v)
-        VERSION_LOCAL=$(echo "$RESPONSE" | jq -r '.version')
-        echo "VERSION=$VERSION_LOCAL" >> $GITHUB_ENV
+        VERSION=$(echo "$RESPONSE" | jq -r '.version')
+        echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
     - name: Stop Flask Application
       run: |
@@ -46,6 +46,9 @@ jobs:
     runs-on : ubuntu-latest
     needs: get-version
     steps:
+      - env:
+          VERSION: ${{needs.get-version.outputs.version}}
+
       - uses: actions/checkout@v3
 
       - name: Print version
