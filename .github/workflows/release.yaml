@@ -32,17 +32,21 @@ jobs:
         RESPONSE=$(curl -s http://localhost:8080/v)
         VERSION=$(echo "$RESPONSE" | jq -r '.version')
         echo "::set-output name=version::$VERSION"
-        echo "Version: $VERSION"
 
     - name: Stop Flask Application
       run: |
         pkill -f "python src/main.py"
 
   # builds docker image and releases it to ghcr
-  build:
+  release:
     runs-on : ubuntu-latest
+    needs: get-version
     steps:
       - uses: actions/checkout@v3
+
+      - name: Print version
+        run:
+          echo "Version: $VERSION"
 
       - name: Convert repository name to lowercase
         run: |
