@@ -19,7 +19,7 @@ jobs:
 
       - name: Debug
         run: |
-          echo "Repository: ${{ REPO_LC }}"
+          echo "Repository: $REPO_LC"
       
       - name: Registry Login (ghcr.io)
         run: |
@@ -27,6 +27,6 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          IMG=ghcr.io/${{ REPO_LC }}
+          IMG=ghcr.io/$REPO_LC
           docker build --tag $IMG:latest .
           docker push --all-tags $IMG
