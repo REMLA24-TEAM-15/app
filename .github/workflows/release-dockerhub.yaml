@@ -27,6 +27,6 @@ jobs:
 
       - name: Build, tag and push Docker image
         run: |
-          IMG=docker.io/$REPO_LC
+          IMG=${DOCKER_USERNAME}/$REPO_LC
           docker build --tag $IMG:latest .
           docker push --all-tags $IMG
