@@ -5,6 +5,40 @@ on:
   workflow_dispatch:
 
 jobs:
+
+  # starts flask application and gets version
+  get-version:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Start Flask Application
+      run: |
+        python src/main.py &
+
+    - name: Test Flask Application
+      run: |
+        RESPONSE=$(curl -s http://localhost:8080/v)
+        VERSION=$(echo "$RESPONSE" | jq -r '.version')
+        echo "::set-output name=version::$VERSION"
+        echo "Version: $VERSION"
+
+    - name: Stop Flask Application
+      run: |
+        pkill -f "python src/main.py"
+
+  # builds docker image and releases it to ghcr
   build:
     runs-on : ubuntu-latest
     steps:

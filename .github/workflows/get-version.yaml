@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  run_flask:
+  get-version:
     runs-on: ubuntu-latest
 
     steps:
