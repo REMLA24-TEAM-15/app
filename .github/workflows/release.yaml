@@ -34,8 +34,8 @@ jobs:
       id: get-version
       run: |
         RESPONSE=$(curl -s http://localhost:8080/v)
-        VERSION=$(echo "$RESPONSE" | jq -r '.version')
-        echo "VERSION=$VERSION" >> $GITHUB_ENV
+        VERSION_LOCAL=$(echo "$RESPONSE" | jq -r '.version')
+        echo "VERSION=$VERSION_LOCAL" >> $GITHUB_ENV
 
     - name: Stop Flask Application
       run: |
