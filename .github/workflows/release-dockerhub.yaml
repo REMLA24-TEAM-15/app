@@ -11,9 +11,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Convert repository name to lowercase
+        run: |
+          echo "REPO_LC=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+
       - name: Debug
         run: |
-          echo "Repository: ${{ github.repository }}"
+          echo "Repository: ${{ REPO_LC }}"
       
       - name: Registry Login (ghcr.io)
         run: |
@@ -21,6 +27,6 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          IMG=ghcr.io/${{ github.repository }}
+          IMG=ghcr.io/${{ REPO_LC }}
           docker build --tag $IMG:latest .
           docker push --all-tags $IMG
