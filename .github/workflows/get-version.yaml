@@ -23,7 +23,7 @@ jobs:
 
     - name: Start Flask Application
       run: |
-        python app.py &
+        python src/main.py &
 
     - name: Wait for Startup
       run: |
@@ -32,8 +32,7 @@ jobs:
 
     - name: Test Flask Application
       run: |
-        # Add commands to test Flask application
-        curl http://localhost:8080/v  # Example test request
+        curl http://localhost:8080/v
 
     - name: Stop Flask Application
       run: |
