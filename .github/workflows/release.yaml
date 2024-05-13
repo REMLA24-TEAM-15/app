@@ -27,7 +27,7 @@ jobs:
       run: |
         python src/main.py &
 
-    - name: Test Flask Application
+    - name: Get Version
       run: |
         RESPONSE=$(curl -s http://localhost:8080/v)
         VERSION=$(echo "$RESPONSE" | jq -r '.version')
@@ -46,17 +46,13 @@ jobs:
 
       - name: Print version
         run: |
-          echo "Version: $VERSION"
+          echo "Version: ${{ needs.get-version.outputs.version }}"
 
       - name: Convert repository name to lowercase
         run: |
           echo "REPO_LC=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
-
-      - name: Debug
-        run: |
-          echo "Repository: ghcr.io/$REPO_LC"
       
       - name: Registry Login (ghcr.io)
         run: |
