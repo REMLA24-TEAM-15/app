@@ -28,6 +28,7 @@ jobs:
         python src/main.py &
 
     - name: Get Version
+      id: get-version
       run: |
         RESPONSE=$(curl -s http://localhost:8080/v)
         VERSION=$(echo "$RESPONSE" | jq -r '.version')
