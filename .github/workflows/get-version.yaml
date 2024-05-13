@@ -29,8 +29,9 @@ jobs:
       run: |
         RESPONSE=$(curl -s http://localhost:8080/v)
         VERSION=$(echo "$RESPONSE" | jq -r '.version')
+        echo "::set-output name=version::$VERSION"
         echo "Version: $VERSION"
 
     - name: Stop Flask Application
       run: |
-        pkill -f "python app.py"
+        pkill -f "python src/main.py"
