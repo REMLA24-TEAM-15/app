@@ -30,5 +30,6 @@ jobs:
           IMG="${DOCKER_USERNAME}/${REPO_LC}"
           echo "${IMG}"
           pwd
+          ls
           docker build --tag $IMG:latest .
           docker push --all-tags $IMG
