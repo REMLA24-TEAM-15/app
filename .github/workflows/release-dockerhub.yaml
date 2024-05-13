@@ -2,41 +2,19 @@ name: release-dockerhub
 
 on:
   push:
-    tags:
-      - "v[0-9]+.[0-9]+.[0-9]+"
+    tags: ["v[0-9]+.[0-9]+.[0-9]+"]
   workflow_dispatch:
-
+    
 jobs:
   build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-      - name: Parse version info from tag
+    runs-on : ubuntu-latest
+      steps:
+      - uses: actions/checkout@v3
+      - name: Registry Login (ghcr.io)
         run: |
-          VERSION=${GITHUB_REF:11}
-          echo "$VERSION"
-          MAJOR=$(echo "$VERSION" | cut -d . -f 1)
-          MINOR=$(echo "$VERSION" | cut -d . -f 2)
-          PATCH=$(echo "$VERSION" | cut -d . -f 3)
-          echo "version=$VERSION" >> $GITHUB_ENV
-          echo "version_major=$MAJOR" >> $GITHUB_ENV
-          echo "version_minor=$MINOR" >> $GITHUB_ENV
-          echo "version_patch=$PATCH" >> $GITHUB_ENV
-
-      - name: Parse version info from tag
-        run: |
-          VERSION=${GITHUB_REF/refs\/tags\/v/}
-          echo "Version: $VERSION"
-          echo "version=$VERSION" >> $GITHUB_ENV
-
-      - name: Build, tag and push Docker image
-        run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/$REPO_LC:$VERSION .
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/$REPO_LC:$VERSION
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          echo "${{ secrets.GH_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Build and Push Docker Image
+      run: |
+      IMG=ghcr.io/${{ github.repository }}
+      docker build --tag $IMG:latest .
+      docker push --all-tags $IMG
