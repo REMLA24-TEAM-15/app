@@ -19,19 +19,14 @@ jobs:
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
 
+      - name: Build, tag and push Docker image
+        run: |
+          IMG="${DOCKER_USERNAME}/${REPO_LC}"
+          echo "${IMG}"
+          docker build --tag $IMG:latest .
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ env.DOCKER_USERNAME }}
           password: ${{ env.DOCKER_PASSWORD }}
-
-      - name: Build, tag and push Docker image
-        run: |
-          IMG="${DOCKER_USERNAME}/${REPO_LC}"
-          echo "${IMG}"
-          pwd
-          ls
-          cd ../
-          ls
-          docker build --tag $IMG:latest .
-          docker push --all-tags $IMG
