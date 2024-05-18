@@ -7,13 +7,15 @@ from flasgger import Swagger
 app = Flask(__name__)
 swagger = Swagger(app)
 
-@app.route("/", methods =["GET"])
-def index ():
-	return render_template("index.html")
+
+@app.route("/", methods=["GET"])
+def index():
+    return render_template("index.html")
+
 
 @app.route("/query", methods=["POST"])
 def query():
-	"""
+    """
 	Passes request for prediction from front end to model-service.
 	---
 	consumes:
@@ -33,34 +35,36 @@ def query():
   	200:
     	description: "The result of the classification: 'phishing' or 'legitimate'."
 	"""
-	endpoint_uri = os.environ.get("MODEL_SERVICE_URI", "http://localhost:8081/")
-	endpoint_uri = endpoint_uri + "predict"
+    endpoint_uri = os.environ.get("MODEL_SERVICE_URI", "http://localhost:8081/")
+    endpoint_uri = endpoint_uri + "predict"
 
-	uri_to_check = request.json.get("uri")
-	input_data = {
-    "link": uri_to_check
-	}
-	
-	response = requests.post(endpoint_uri, json=input_data)
+    uri_to_check = request.json.get("uri")
+    input_data = {
+        "link": uri_to_check
+    }
 
-	if response.status_code == 200:
-		data = response.json()
-		prediction = data.get("Prediction")
-		return jsonify({"Prediction": prediction})
-	else:
-		print("Error:", response.status_code)
-		return None
+    response = requests.post(endpoint_uri, json=input_data)
+
+    if response.status_code == 200:
+        data = response.json()
+        prediction = data.get("Prediction")
+        return jsonify({"Prediction": prediction})
+    else:
+        print("Error:", response.status_code)
+        return None
+
 
 @app.route("/v", methods=["GET"])
 def get_version():
-	"""
+    """
     Returns a version from version-lib.
     ---
     responses:
       200:
         description: "Current version of the webapp."
     """
-	version = VersionUtil.get_version()
-	return jsonify({"version": version})
+    version = VersionUtil.get_version()
+    return jsonify({"version": version})
 
-app.run(host="0.0.0.0", port=8080 , debug=True)
+
+app.run(host="0.0.0.0", port=8080, debug=True)
