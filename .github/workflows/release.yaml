@@ -1,73 +1,42 @@
-name: release
-
+name: Release
 on:
   push:
+    tags: ["v[0-9]+.[0-9]+.[0-9]+"]
   workflow_dispatch:
-
 jobs:
-
-  # starts flask application and gets version
-  get-version:
+  build:
     runs-on: ubuntu-latest
-
-    outputs:
-      version: ${{ steps.request.outputs.version }}
-
+    permissions: write-all
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
-
-    - name: Install dependencies
-      run: |
-        pip install -r requirements.txt
-
-    - name: Start Flask Application
-      run: |
-        python src/main.py &
-
-    - name: Get Version
-      id: request
-      run: |
-        RESPONSE=$(curl -s http://localhost:8080/v)
-        VERSION=$(echo "$RESPONSE" | jq -r '.version')
-        echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-
-    - name: Stop Flask Application
-      run: |
-        pkill -f "python src/main.py"
-
-  # builds docker image and releases it to ghcr
-  release:
-    runs-on : ubuntu-latest
-    needs: get-version
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Print version
-        env:
-          VERSION: ${{ needs.get-version.outputs.version }}
+      - uses: actions/checkout@v4
+      - name: Parse version info from tag
         run: |
-          echo "Version: $VERSION"
+          # GITHUB_REF is like refs/tags/v2.3.5, so strip the first 11 chars
+          VERSION=${GITHUB_REF:11}
+          MAJOR=`echo "$VERSION" | cut -d . -f 1`
+          MINOR=`echo "$VERSION" | cut -d . -f 2`
+          PATCH=`echo "$VERSION" | cut -d . -f 3`
+          echo "version=$VERSION" >> $GITHUB_ENV
+          echo "version_major=$MAJOR" >> $GITHUB_ENV
+          echo "version_minor=$MINOR" >> $GITHUB_ENV
+          echo "version_patch=$PATCH" >> $GITHUB_ENV
+
+      - name: Login to Github registry
+        run: echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Convert repository name to lowercase
         run: |
           echo "REPO_LC=$(echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
-      
-      - name: Registry Login (ghcr.io)
-        run: |
-          echo "${{ secrets.GH_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Build and Push Docker Image
-        env:
-          VERSION: ${{ needs.get-version.outputs.version }}
         run: |
           IMG=ghcr.io/$REPO_LC
-          docker build --tag $IMG:latest --tag $IMG:$VERSION .
+          docker build \
+          --tag $IMG:${{ env.version }} \
+          --tag $IMG:${{ env.version_major }}.${{ env.version_minor }}.latest \
+          --tag $IMG:${{ env.version_major }}.latest \
+          --tag $IMG:latest \
+          .
           docker push --all-tags $IMG
