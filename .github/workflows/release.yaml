@@ -22,7 +22,7 @@ jobs:
           echo "version_patch=$PATCH" >> $GITHUB_ENV
 
       - name: Login to Github registry
-        run: echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.GH_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Convert repository name to lowercase
         run: |
