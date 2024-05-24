@@ -20,7 +20,7 @@ jobs:
 
       - name: Generate Docs
         run: |
-          pdoc --html src --output-dir docs
+          pdoc src --html --force --output-dir docs
 
       - name: Parse version info from tag
         run: |
