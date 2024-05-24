@@ -16,7 +16,7 @@ jobs:
 
       - name: Install pdoc
         run: |
-          pip install pdoc
+          pip install pdoc3
 
       - name: Generate Docs
         run: |
