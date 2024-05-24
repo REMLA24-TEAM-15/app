@@ -10,6 +10,9 @@ swagger = Swagger(app)
 
 @app.route("/", methods=["GET"])
 def index():
+    """
+    Returns index.html to be displayed in a browser.
+    """
     return render_template("index.html")
 
 
@@ -67,4 +70,5 @@ def get_version():
     return jsonify({"version": version})
 
 
-app.run(host="0.0.0.0", port=8080, debug=True)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8080, debug=True)
