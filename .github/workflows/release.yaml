@@ -9,6 +9,19 @@ jobs:
     permissions: write-all
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install Requirements
+        run: |
+          pip install -r requirements.txt
+
+      - name: Install pdoc
+        run: |
+          pip install pdoc
+
+      - name: Generate Docs
+        run: |
+          pdoc --html src --output-dir docs
+
       - name: Parse version info from tag
         run: |
           # GITHUB_REF is like refs/tags/v2.3.5, so strip the first 11 chars

@@ -10,6 +10,9 @@ swagger = Swagger(app)
 
 @app.route("/", methods=["GET"])
 def index():
+    """
+    Returns index.html to be displayed in a browser.
+    """
     return render_template("index.html")
 
 
