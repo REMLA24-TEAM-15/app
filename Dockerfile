@@ -3,7 +3,6 @@ FROM python:3.9
 WORKDIR /app
 COPY . /app
 COPY pyproject.toml poetry.lock ./
-#RUN pip install -r requirements.txt
 RUN pip install poetry
 RUN poetry install --no-root
 EXPOSE 8080
