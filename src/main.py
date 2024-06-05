@@ -3,10 +3,20 @@ import requests
 import os
 from lib_version_URLPhishing.version_util import VersionUtil
 from flasgger import Swagger
+from prometheus_flask_exporter import PrometheusMetrics
+import yaml
+
+with open("version.yaml") as stream:
+    try:
+        version = yaml.safe_load(stream)
+    except yaml.YAMLError as exc:
+        print(exc)
 
 app = Flask(__name__)
 swagger = Swagger(app)
+metrics = PrometheusMetrics(app)
 
+metrics.info('app_version', 'Application version', version=version['version'])
 
 @app.route("/", methods=["GET"])
 def index():
@@ -69,6 +79,12 @@ def get_version():
     version = VersionUtil.get_version()
     return jsonify({"version": version})
 
+metrics.register_default(
+    metrics.counter(
+        'by_path_counter', 'Request count by request paths',
+        labels={'path': lambda: request.path}
+    )
+)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080, debug=True)
+    app.run(host="0.0.0.0", port=8080)

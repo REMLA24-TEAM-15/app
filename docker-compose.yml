@@ -1,6 +1,7 @@
 # docker-compose.yml
 services:
-  NAME:
-    image: sha256:46730fb6cc94ede8af891cbd44836d4410a90765915e702322b78cf29aaa5743
+  app:
+    build: ./
+    container_name: app
     ports:
       - 8080:8080
