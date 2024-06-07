@@ -79,6 +79,10 @@ def get_version():
     version = VersionUtil.get_version()
     return jsonify({"version": version})
 
+@app.route("/metrics")
+def metrics():
+    return flask.Response(prometheus_client.generate_latest(), mimetype="text/plain")
+
 metrics.register_default(
     metrics.counter(
         'by_path_counter', 'Request count by request paths',
