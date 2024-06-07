@@ -81,6 +81,10 @@ def get_version():
 
 @app.route("/metrics")
 def metrics():
+    """
+    Only for use with grafana!
+    Returns current metrics of the application.
+    """
     return flask.Response(prometheus_client.generate_latest(), mimetype="text/plain")
 
 metrics.register_default(

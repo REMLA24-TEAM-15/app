@@ -463,6 +463,35 @@ mako = "*"
 markdown = ">=3.0"
 
 [[package]]
+name = "prometheus-client"
+version = "0.20.0"
+description = "Python client for the Prometheus monitoring system."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "prometheus_client-0.20.0-py3-none-any.whl", hash = "sha256:cde524a85bce83ca359cc837f28b8c0db5cac7aa653a588fd7e84ba061c329e7"},
+    {file = "prometheus_client-0.20.0.tar.gz", hash = "sha256:287629d00b147a32dcb2be0b9df905da599b2d82f80377083ec8463309a4bb89"},
+]
+
+[package.extras]
+twisted = ["twisted"]
+
+[[package]]
+name = "prometheus-flask-exporter"
+version = "0.23.0"
+description = "Prometheus metrics exporter for Flask"
+optional = false
+python-versions = "*"
+files = [
+    {file = "prometheus_flask_exporter-0.23.0-py3-none-any.whl", hash = "sha256:7a026b4fdd54ebeddb77589333efe3a1ec43c7c717468825b0b3e9b6c33f7e9e"},
+    {file = "prometheus_flask_exporter-0.23.0.tar.gz", hash = "sha256:e4e6beb1b8e1e164da6d70fe1edefc95ef184f113b5047f66f4b7262233da9c0"},
+]
+
+[package.dependencies]
+flask = "*"
+prometheus-client = "*"
+
+[[package]]
 name = "pycodestyle"
 version = "2.7.0"
 description = "Python style guide checker"
@@ -736,4 +765,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "5d05e9068a271bf6140442f9300276b563a7bf50bdc509d0e5906247c0524dce"
+content-hash = "0be26540dd8eb2d2bb25de242b6a02d5520d3ef2f723412aca911dabbb6de9cf"
