@@ -80,7 +80,7 @@ def get_version():
     return jsonify({"version": version})
 
 @app.route("/metrics")
-def metrics():
+def metrics_endpoint():
     """
     Only for use with grafana!
     Returns current metrics of the application.
