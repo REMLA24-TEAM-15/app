@@ -12,7 +12,7 @@ requests = "2.31.0"
 lib-version-urlphishing = "^2.6.1"
 flasgger = "0.9.7.1"
 prometheus-flask-exporter = "^0.23.0"
-
+pylint = "2.13"
 
 [build-system]
 requires = ["poetry-core"]
