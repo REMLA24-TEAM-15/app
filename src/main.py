@@ -1,6 +1,6 @@
+import os
 from flask import Flask, request, render_template, jsonify
 import requests
-import os
 from lib_version_URLPhishing.version_util import VersionUtil
 from flasgger import Swagger
 from prometheus_flask_exporter import PrometheusMetrics
@@ -80,8 +80,8 @@ def get_version():
       200:
         description: "Current version of the webapp."
     """
-    version = VersionUtil.get_version()
-    return jsonify({"version": version, "helm_name": os.environ.get("HELM_NAME", "no-name")})
+    lib_version = VersionUtil.get_version()
+    return jsonify({"version": lib_version, "helm_name": os.environ.get("HELM_NAME", "no-name")})
 
 metrics.register_default(
     metrics.counter(
