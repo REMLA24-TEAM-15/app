@@ -47,7 +47,7 @@
             const inputValue = document.getElementById("inputText").value;
 
             try {
-                const response = await fetch('/query', {
+                const response = await fetch(window.location.pathname + '/query', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -78,7 +78,7 @@
 
         async function getVersion() {
             try {
-                const response = await fetch('/v', {method: 'GET'});
+                const response = await fetch(window.location.pathname + '/v', {method: 'GET'});
                 const responseJson = await response.json();
                 document.getElementById("versionInfo").innerText = "Version: " + responseJson.version;
             } catch (error) {
