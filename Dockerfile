@@ -1,5 +1,5 @@
 #Dockerfile
-FROM python:3.9
+FROM python:3.10.14
 WORKDIR /app
 COPY pyproject.toml poetry.lock ./
 RUN pip install poetry
