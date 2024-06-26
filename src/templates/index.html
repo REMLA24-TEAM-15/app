@@ -27,7 +27,6 @@
         }
         #inputText {
             width: 300px;
-
             font-size: 16px;
             margin-bottom: 10px;
         }
@@ -40,6 +39,8 @@
         <button onclick="predict()">Check!</button>
         <h3 id="versionInfo">Version</h3>
         <div id="symbol" class="symbol"></div>
+        <div id="predictionTime"></div>
+        <div id="modelVersion"></div>
     </div>
 
     <script>
@@ -67,6 +68,11 @@
                     document.getElementById("symbol").classList.remove("red");
                     document.getElementById("symbol").classList.add("green");
                 }
+
+                // Display PredictionTime and ModelVersion
+                document.getElementById("predictionTime").innerText = "Prediction Time: " + data.predictionTime;
+                document.getElementById("modelVersion").innerText = "Model Version: " + data.modelVersion;
+
             } catch (error) {
                 console.error('Error:', error);
             }

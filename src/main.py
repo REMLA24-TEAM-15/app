@@ -61,7 +61,11 @@ def query():
     if response.status_code == 200:
         data = response.json()
         prediction = data.get("Prediction")
-        return jsonify({"Prediction": prediction})
+        pred_time = data.get("PredictionTime")
+        model_version = data.get("ModelVersion")
+        return jsonify({"Prediction": prediction,
+                        "predictionTime": [pred_time],
+                        "modelVersion": [model_version]})
     else:
         print("Error:", response.status_code)
         return None
@@ -82,7 +86,8 @@ def get_version():
 metrics.register_default(
     metrics.counter(
         'by_path_counter', 'Request count by request paths',
-        labels={'path': lambda: request.path}
+        labels={'path': lambda: request.path,
+                'helm_name': os.environ.get("HELM_NAME", "no-name")}
     )
 )
 
