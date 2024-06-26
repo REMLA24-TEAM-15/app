@@ -35,6 +35,7 @@
 <body>
     <div class="container">
         <h2>Check your URI for phishing</h2>
+        <div id="helmName"></div>
         <input type="text" id="inputText" placeholder="Enter something">
         <button onclick="predict()">Check!</button>
         <h3 id="versionInfo">Version</h3>
@@ -87,6 +88,7 @@
                 const response = await fetch(window.location.origin + window.location.pathname + '/v', {method: 'GET'});
                 const responseJson = await response.json();
                 document.getElementById("versionInfo").innerText = "Version: " + responseJson.version;
+                document.getElementById("helmName").innerText = responseJson.helm_name;
             } catch (error) {
                 console.error('Error:', error);
             }

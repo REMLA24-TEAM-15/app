@@ -81,7 +81,7 @@ def get_version():
         description: "Current version of the webapp."
     """
     version = VersionUtil.get_version()
-    return jsonify({"version": version})
+    return jsonify({"version": version, "helm_name": os.environ.get("HELM_NAME", "no-name")})
 
 metrics.register_default(
     metrics.counter(
