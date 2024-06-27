@@ -36,3 +36,6 @@ Open any URLs in the terminal to make a prediction!
 2. 'spam/not_spam' : This metric counts the number of spam and not_spam predictions made by the app. 
 
 
+
+## Tokens Required:
+For this repository you require a GitHub token (e.g GH_Token) with package and repo read/write permissions. 
