@@ -63,11 +63,11 @@ jobs:
 
       - name: Install pdoc
         run: |
-          pip install pdoc3
+          poetry run pip install pdoc3
 
       - name: Generate Docs
         run: |
-          pdoc src --html --force --output-dir docs
+          poetry run pdoc src --html --force --output-dir docs
 
       - name: Deploy Docs to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
