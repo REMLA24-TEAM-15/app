@@ -1,6 +1,6 @@
 # App Service
 This is the flask app that users interact with as a part of the URL phishing detection project. \
-[GitHub Pages](https://remla24-team-15.github.io/app/) \
+[GitHub Pages](https://remla24-team-15.github.io/app/) 
 
 It is recommended to run the application using docker-compose. More instructions are present in the [Operation](https://github.com/REMLA24-TEAM-15/Operation) repository.
 
