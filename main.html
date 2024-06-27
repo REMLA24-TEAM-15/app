@@ -26,15 +26,25 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from flask import Flask, request, render_template, jsonify
+<pre><code class="python">import os
+from flask import Flask, request, render_template, jsonify
 import requests
-import os
 from lib_version_URLPhishing.version_util import VersionUtil
 from flasgger import Swagger
+from prometheus_flask_exporter import PrometheusMetrics
+import yaml
+
+with open(&#34;version.yaml&#34;) as stream:
+    try:
+        version = yaml.safe_load(stream)
+    except yaml.YAMLError as exc:
+        print(exc)
 
 app = Flask(__name__)
 swagger = Swagger(app)
+metrics = PrometheusMetrics(app)
 
+metrics.info(&#39;app_version&#39;, &#39;Application version&#39;, version=version[&#39;version&#39;])
 
 @app.route(&#34;/&#34;, methods=[&#34;GET&#34;])
 def index():
@@ -79,7 +89,11 @@ def query():
     if response.status_code == 200:
         data = response.json()
         prediction = data.get(&#34;Prediction&#34;)
-        return jsonify({&#34;Prediction&#34;: prediction})
+        pred_time = data.get(&#34;PredictionTime&#34;)
+        model_version = data.get(&#34;ModelVersion&#34;)
+        return jsonify({&#34;Prediction&#34;: prediction,
+                        &#34;predictionTime&#34;: [pred_time],
+                        &#34;modelVersion&#34;: [model_version]})
     else:
         print(&#34;Error:&#34;, response.status_code)
         return None
@@ -94,12 +108,19 @@ def get_version():
       200:
         description: &#34;Current version of the webapp.&#34;
     &#34;&#34;&#34;
-    version = VersionUtil.get_version()
-    return jsonify({&#34;version&#34;: version})
+    lib_version = VersionUtil.get_version()
+    return jsonify({&#34;version&#34;: lib_version, &#34;helm_name&#34;: os.environ.get(&#34;HELM_NAME&#34;, &#34;no-name&#34;)})
 
+metrics.register_default(
+    metrics.counter(
+        &#39;by_path_counter&#39;, &#39;Request count by request paths&#39;,
+        labels={&#39;path&#39;: lambda: request.path,
+                &#39;helm_name&#39;: os.environ.get(&#34;HELM_NAME&#34;, &#34;no-name&#34;)}
+    )
+)
 
 if __name__ == &#34;__main__&#34;:
-    app.run(host=&#34;0.0.0.0&#34;, port=8080, debug=True)</code></pre>
+    app.run(host=&#34;0.0.0.0&#34;, port=8080)</code></pre>
 </details>
 </section>
 <section>
@@ -130,8 +151,8 @@ def get_version():
       200:
         description: &#34;Current version of the webapp.&#34;
     &#34;&#34;&#34;
-    version = VersionUtil.get_version()
-    return jsonify({&#34;version&#34;: version})</code></pre>
+    lib_version = VersionUtil.get_version()
+    return jsonify({&#34;version&#34;: lib_version, &#34;helm_name&#34;: os.environ.get(&#34;HELM_NAME&#34;, &#34;no-name&#34;)})</code></pre>
 </details>
 </dd>
 <dt id="src.main.index"><code class="name flex">
@@ -212,7 +233,11 @@ def query():
     if response.status_code == 200:
         data = response.json()
         prediction = data.get(&#34;Prediction&#34;)
-        return jsonify({&#34;Prediction&#34;: prediction})
+        pred_time = data.get(&#34;PredictionTime&#34;)
+        model_version = data.get(&#34;ModelVersion&#34;)
+        return jsonify({&#34;Prediction&#34;: prediction,
+                        &#34;predictionTime&#34;: [pred_time],
+                        &#34;modelVersion&#34;: [model_version]})
     else:
         print(&#34;Error:&#34;, response.status_code)
         return None</code></pre>
