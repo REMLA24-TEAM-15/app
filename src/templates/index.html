@@ -60,14 +60,14 @@
                 const data = await response.json();
                 console.log(data)
 
-                if (data.prediction == 1) {
-                    document.getElementById("symbol").innerHTML = "&#x2718;";
-                    document.getElementById("symbol").classList.remove("green");
-                    document.getElementById("symbol").classList.add("red");
-                } else {
-                    document.getElementById("symbol").innerHTML = "&#x2714;";
+                if (data.prediction == 0) {
+                    document.getElementById("symbol").innerHTML = "NOT SPAM";
                     document.getElementById("symbol").classList.remove("red");
                     document.getElementById("symbol").classList.add("green");
+                } else {
+                    document.getElementById("symbol").innerHTML = "SPAM";
+                    document.getElementById("symbol").classList.remove("green");
+                    document.getElementById("symbol").classList.add("red");
                 }
 
                 // Display PredictionTime and ModelVersion
