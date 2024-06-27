@@ -1,3 +1,11 @@
+# App Service
+This is the flask app that users interact with as a part of the URL phishing detection project.
+
+## Setup Instructions
+
+
+
+
 ## Release in a docker image
 
 1. **Build docker image:**

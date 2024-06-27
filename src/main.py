@@ -4,6 +4,7 @@ import requests
 from lib_version_URLPhishing.version_util import VersionUtil
 from flasgger import Swagger
 from prometheus_flask_exporter import PrometheusMetrics
+from prometheus_client import Counter
 import yaml
 
 with open("version.yaml") as stream:
@@ -19,10 +20,10 @@ metrics = PrometheusMetrics(app)
 metrics.info('app_version', 'Application version', version=version['version'])
 
 # Initialize counters
-spam_counter = metrics.counter(
+spam_counter = Counter(
     'spam_count', 'Count of spam predictions'
 )
-not_spam_counter = metrics.counter(
+not_spam_counter = Counter(
     'not_spam_count', 'Count of not spam predictions'
 )
 
