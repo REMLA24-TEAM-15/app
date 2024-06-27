@@ -18,6 +18,14 @@ metrics = PrometheusMetrics(app)
 
 metrics.info('app_version', 'Application version', version=version['version'])
 
+# Initialize counters
+spam_counter = metrics.counter(
+    'spam_count', 'Count of spam predictions'
+)
+not_spam_counter = metrics.counter(
+    'not_spam_count', 'Count of not spam predictions'
+)
+
 @app.route("/", methods=["GET"])
 def index():
     """
@@ -63,6 +71,11 @@ def query():
         prediction = data.get("Prediction")
         pred_time = data.get("PredictionTime")
         model_version = data.get("ModelVersion")
+        if prediction == 0:
+            not_spam_counter.inc()
+        else:
+            spam_counter.inc()
+
         return jsonify({"Prediction": prediction,
                         "predictionTime": [pred_time],
                         "modelVersion": [model_version]})
