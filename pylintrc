@@ -482,7 +482,8 @@ disable=raw-checker-failed,
         raising-bad-type,
         import-error,
         no-name-in-module,
-        no-else-return
+        no-else-return,
+        no-member
 
 
 # Enable the message, report, category or checker with the given id(s). You can
