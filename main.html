@@ -32,6 +32,7 @@ import requests
 from lib_version_URLPhishing.version_util import VersionUtil
 from flasgger import Swagger
 from prometheus_flask_exporter import PrometheusMetrics
+from prometheus_client import Counter
 import yaml
 
 with open(&#34;version.yaml&#34;) as stream:
@@ -45,6 +46,14 @@ swagger = Swagger(app)
 metrics = PrometheusMetrics(app)
 
 metrics.info(&#39;app_version&#39;, &#39;Application version&#39;, version=version[&#39;version&#39;])
+
+# Initialize counters
+spam_counter = Counter(
+    &#39;spam_count&#39;, &#39;Count of spam predictions&#39;
+)
+not_spam_counter = Counter(
+    &#39;not_spam_count&#39;, &#39;Count of not spam predictions&#39;
+)
 
 @app.route(&#34;/&#34;, methods=[&#34;GET&#34;])
 def index():
@@ -91,6 +100,11 @@ def query():
         prediction = data.get(&#34;Prediction&#34;)
         pred_time = data.get(&#34;PredictionTime&#34;)
         model_version = data.get(&#34;ModelVersion&#34;)
+        if prediction == 0:
+            not_spam_counter.inc()
+        else:
+            spam_counter.inc()
+
         return jsonify({&#34;Prediction&#34;: prediction,
                         &#34;predictionTime&#34;: [pred_time],
                         &#34;modelVersion&#34;: [model_version]})
@@ -235,6 +249,11 @@ def query():
         prediction = data.get(&#34;Prediction&#34;)
         pred_time = data.get(&#34;PredictionTime&#34;)
         model_version = data.get(&#34;ModelVersion&#34;)
+        if prediction == 0:
+            not_spam_counter.inc()
+        else:
+            spam_counter.inc()
+
         return jsonify({&#34;Prediction&#34;: prediction,
                         &#34;predictionTime&#34;: [pred_time],
                         &#34;modelVersion&#34;: [model_version]})
